@@ -1,10 +1,14 @@
-#da eseguire alla fine di ogni settimana, perché ovviamente non era chiara come cosa
-
+"""
+SI DOVREBBERO GESTIRE LE SETTIMANE DI VACANZA
+"""
 def main():
     prima()
     triennio()
 
 def prima():
+    """
+    Esegue le operazioni per variare i file in base alla settimana attuale per i file della prima
+    """
     f = open("nSettPrima", "r")
     letto = f.read()
     f.close()
@@ -36,6 +40,9 @@ def prima():
             f.close()
 
 def triennio():
+    """
+    Esegue le operazioni per variare i file in base alla settimana attuale per i file del triennio
+    """
     f = open("nSettTriennio", "r")
     letto = f.read()
     f.close()

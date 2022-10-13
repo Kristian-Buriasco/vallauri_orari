@@ -20,7 +20,7 @@ print("divisione primo...")
 for i in range(len(CHIUSO)):
     CHIUSO[i].save('immagini/1/p' + str(i) + '.png', 'PNG')
 
-del CHIUSO #non tutti hanno 64 gb di ram, i comuni mortali si devono arrangiare
+del CHIUSO
 
 logging.info('Diviso ORARIO_CLASSI_SABATI_CHIUSI.pdf')
 

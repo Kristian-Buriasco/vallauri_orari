@@ -4,7 +4,8 @@ import random
 
 import pytz
 from telegram import Update
-from telegram.ext import Updater, ApplicationBuilder, ContextTypes, CommandHandler, ConversationHandler, CallbackContext, MessageHandler
+from telegram.ext import Updater, ApplicationBuilder, ContextTypes, CommandHandler, ConversationHandler, \
+    CallbackContext, MessageHandler
 
 import database.classi.database_read as database_read
 
@@ -15,10 +16,17 @@ logging.basicConfig(
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Invia un messaggio di start che aiuta a iniziare a usare il bot
+    """
     await context.bot.send_message(chat_id=update.effective_chat.id,
                                    text="ciao, ti aiuterò nella configurazione \n- configura l'indirizzo con il comando /indirizzo seguito dall'indirizo (INF, ELT, LIC, ...)\n- configura la sezione con il comando /sezione seguito dalla sezione (A, B, C, D, ...)\n- come ultima cosa configura l'anno con il comando /anno seguito dall'anno (1, 2, 3, 4, 5)\n- puoi vedere la configurazione usando il comando /classe\nTutte le informazioni che verranno usate dal bot sono ricavate da una lettura automatizzata dei PDF forniti dall'istituto, pertanto potrebbero esserci degli errori, potrai comunicarceli con /errore seguito dalla descrizione dell'errore l'errore in modo che potremo sistemarli")
 
+
 async def indirizzo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Consente all'utente di inserire l'indirizzo di appartenenza
+    """
     argomento = " ".join(context.args)
     argomento = argomento.replace(" ", "")
     argomento = argomento.upper()
@@ -35,6 +43,9 @@ async def indirizzo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def sezione(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Consente all'utente di inserire la sezione di appartenenza
+    """
     argomento = " ".join(context.args)
     argomento = argomento.replace(" ", "")
     argomento = argomento.upper()
@@ -52,6 +63,9 @@ async def sezione(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def anno(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Consente all'utente di inserire l'anno di appartenenza
+    """
     argomento = " ".join(context.args)
     argomento = argomento.replace(" ", "")
     argomento = argomento.upper()
@@ -68,6 +82,9 @@ async def anno(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def classe(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Invia all'utente la classe che ha impostato e l'id della chat
+    """
     f = open("database/groups.txt", "r")
     linee = f.readlines()
     testo = "\n".join(linee)
@@ -76,15 +93,17 @@ async def classe(update: Update, context: ContextTypes.DEFAULT_TYPE):
     for linea in linee:
         if int(linea.split(":")[0]) == int(context._chat_id):
             riga = linea.split(":")
-    if len(riga) == 93: #è un accrocchio? si! funziona? certo. potrei farlo molto meglio? probabile. lo faro? forse.
-                        #è un commento utile? ma assolutamente no
+    if len(riga) == 93:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=riga)
     else:
         await context.bot.send_message(chat_id=update.effective_chat.id,
                                        text=f"ID:{riga[0]}, {riga[1]}{riga[2]} {riga[3]}")
 
 
-async def ora(update: Update,context: ContextTypes.DEFAULT_TYPE): #ancora moooooooooooooooooooolto da modificare
+async def ora(update: Update, context: ContextTypes.DEFAULT_TYPE):  # fare in modo di poter eliminare e modificare la programmazione
+    """
+        Consente di impostare un orario nel quale ottenere l'orario del giorno attuale o di quello successivo
+    """
     argomenti = " ".join(context.args).strip()
     argomenti = argomenti.split(" ")
     giorno = "nulla"
@@ -111,8 +130,12 @@ async def ora(update: Update,context: ContextTypes.DEFAULT_TYPE): #ancora mooooo
         if len(divisa) == 2 and divisa[0] <= 24 and divisa[0] >= 0 and divisa[1] <= 59 and divisa[1] >= 0:
 
             chat_id = update.effective_chat.id
-            context.job_queue.run_daily(orario_programmato_oggi, time=datetime.time(hour=divisa[0], minute=divisa[1],tzinfo=pytz.timezone('Europe/Rome')),chat_id=chat_id, name=str(chat_id))
-            await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Orario automatico correttamente settato alle {divisa[0]}:{divisa[1]} di ogni giorno.\nManderà l'orario della giornata.\n\nPuoi modificarlo con /modificaora")
+            context.job_queue.run_daily(orario_programmato_oggi, time=datetime.time(hour=divisa[0], minute=divisa[1],
+                                                                                    tzinfo=pytz.timezone(
+                                                                                        'Europe/Rome')),
+                                        chat_id=chat_id, name=str(chat_id))
+            await context.bot.send_message(chat_id=update.effective_chat.id,
+                                           text=f"Orario automatico correttamente settato alle {divisa[0]}:{divisa[1]} di ogni giorno.\nManderà l'orario della giornata.\n\nPuoi modificarlo con /modificaora")
         else:
             await context.bot.send_message(chat_id=update.effective_chat.id,
                                            text="controlla il messaggio che hai mandato, assicurati di aver scritto l'ora in 24h (14:20)")
@@ -124,14 +147,21 @@ async def ora(update: Update,context: ContextTypes.DEFAULT_TYPE): #ancora mooooo
         if len(divisa) == 2 and divisa[0] <= 24 and divisa[0] >= 0 and divisa[1] <= 59 and divisa[1] >= 0:
 
             chat_id = update.effective_chat.id
-            context.job_queue.run_daily(orario_programmato_domani, time=datetime.time(hour=divisa[0], minute=divisa[1],tzinfo=pytz.timezone('Europe/Rome')),chat_id=chat_id, name=str(chat_id))
-            await context.bot.send_message(chat_id=update.effective_chat.id, text=f"Orario automatico correttamente settato alle {divisa[0]}:{divisa[1]} di ogni giorno.\nManderà l'orario della giornata successiva.\n\nPuoi modificarlo con /modificaora")
+            context.job_queue.run_daily(orario_programmato_domani, time=datetime.time(hour=divisa[0], minute=divisa[1],
+                                                                                      tzinfo=pytz.timezone(
+                                                                                          'Europe/Rome')),
+                                        chat_id=chat_id, name=str(chat_id))
+            await context.bot.send_message(chat_id=update.effective_chat.id,
+                                           text=f"Orario automatico correttamente settato alle {divisa[0]}:{divisa[1]} di ogni giorno.\nManderà l'orario della giornata successiva.\n\nPuoi modificarlo con /modificaora")
         else:
             await context.bot.send_message(chat_id=update.effective_chat.id,
                                            text="controlla il messaggio che hai mandato, assicurati di aver scritto l'ora in 24h (14:20)")
 
 
 async def orario_programmato_oggi(context: ContextTypes.DEFAULT_TYPE):
+    """
+        Invia l'orario del giorno attuale quando viene richiamato dalla programmazione
+    """
     f = open("database/groups.txt", "r")
     linee = f.readlines()
     f.close()
@@ -155,6 +185,9 @@ async def orario_programmato_oggi(context: ContextTypes.DEFAULT_TYPE):
 
 
 async def orario_programmato_domani(context: ContextTypes.DEFAULT_TYPE):
+    """
+        Invia l'orario del giorno successivo quando viene richiamato dalla programmazione
+    """
     f = open("database/groups.txt", "r")
     linee = f.readlines()
     f.close()
@@ -178,6 +211,9 @@ async def orario_programmato_domani(context: ContextTypes.DEFAULT_TYPE):
 
 
 async def orario(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Invia l'orario del giorno attuale
+    """
     f = open("database/groups.txt", "r")
     linee = f.readlines()
     f.close()
@@ -201,6 +237,9 @@ async def orario(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def orariodomani(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Invia l'orario del giorno successivo
+    """
     f = open("database/groups.txt", "r")
     linee = f.readlines()
     f.close()
@@ -226,10 +265,13 @@ async def orariodomani(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def errore(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Raccoglie le segnalazioni d'errore degli utenti nel file errori.txt
+    """
     argomento = " ".join(context.args)
     if len(argomento) > 0:
         f = open("database/errori.txt", "a")
-        f.write("\n" + argomento)
+        f.write("\n" + f"id: {update.effective_chat.id} --> {argomento}")
         f.close()
         await context.bot.send_message(chat_id=update.effective_chat.id,
                                        text="la segnalazione è stata registrata con successo")
@@ -238,7 +280,10 @@ async def errore(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                        text="non è stato possibile registrare la segnalazione, probabilmente non sono stati trasmessi valori al comando (/errore questo è un errore)")
 
 
-async def gattino(update: Update, context: ContextTypes.DEFAULT_TYPE): #mi sembra scontata come cosa... non può assolutamente mancare un comando simile...
+async def gattino(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Invia un immagine casuale di un gatto proveniente da https://http.cat
+    """
     gatti = [100, 101, 102, 200, 201, 202, 203, 204, 206, 207, 300, 301, 302, 303, 304, 305, 307, 308, 400, 401, 402,
              403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 420, 421, 422, 423, 424,
              425, 426, 429, 431, 444, 450, 451, 497, 498, 499, 500, 501, 502, 503, 504, 506, 507, 508, 509, 510, 511,
@@ -247,6 +292,11 @@ async def gattino(update: Update, context: ContextTypes.DEFAULT_TYPE): #mi sembr
     await context.bot.send_photo(chat_id=update.effective_chat.id,
                                  photo=f"https://http.cat/{str(random.choice(gatti))}")
 
+
+async def modifica(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """
+        Consente di modificare il testo di un ora in base agli argomenti passati
+    """
 
 def controllo_id(id):
     f = open("database/groups.txt", "r")
@@ -296,7 +346,7 @@ def aggiungi_valore(id, valore, posizione):
 
 
 def no_scuola():
-    f = open("database/frasi/no_scuola.txt", "r") #per la fantasia di queste bellissime frasi bisogna ringraziare gabriel ferrero
+    f = open("database/frasi/no_scuola.txt", "r")
     righe = f.readlines()
     f.close()
     text = random.choice(righe)
@@ -318,6 +368,7 @@ if __name__ == '__main__':
     orariodomani_comando = CommandHandler('orariodomani', orariodomani)
     errore_comando = CommandHandler('errore', errore)
     gattino_comando = CommandHandler('gattino', gattino)
+    modifica_comando = CommandHandler('modifica', modifica)
 
     application.add_handler(start_handler)
     application.add_handler(indirizzo_comando)
@@ -329,4 +380,5 @@ if __name__ == '__main__':
     application.add_handler(orariodomani_comando)
     application.add_handler(errore_comando)
     application.add_handler(gattino_comando)
+    application.add_handler(modifica_comando)
     application.run_polling()
