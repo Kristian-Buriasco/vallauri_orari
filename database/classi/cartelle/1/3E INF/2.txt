@@ -1,0 +1,24 @@
+:::Bi (Tete ee -v4(o0
+DATO F.,RESID ELT ORE 6
+LAB.134 TELECOMUNICAZIONI(26)
+
+:::Bi (Tete ee -v4(o0
+DATO F.,RESID ELT ORE 6
+LAB.134 TELECOMUNICAZIONI(26)
+
+:::Informatica
+BARBERO A.
+LAB.116 LAPLACE (26)
+
+:::Sistemi e reti
+LOMBARDO M.
+LAB.116 LAPLACE (26)
+
+:::Lingua inglese
+FACAS |.
+151 LIM (28)
+
+:::Matematica
+BRIZIO M.
+151 LIM (28)
+

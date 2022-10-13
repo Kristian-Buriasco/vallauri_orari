@@ -1,0 +1,24 @@
+:::T.P.S.LT.
+FEA D.
+LAB.142 NEWTON (27)
+
+:::T.P.S.LT.
+FEA D.
+LAB.142 NEWTON (27)
+
+:::Scienze motorie e sportive
+MONDINO A.
+PALESTRA
+
+:::Scienze motorie e sportive
+MONDINO A.
+PALESTRA
+
+:::Sistemi e reti
+CANONICO T.
+LAB.S18 MARCONI (21)
+
+:::Lingua inglese
+FOGLIA P.
+140 LIM (28)
+

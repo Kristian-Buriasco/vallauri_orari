@@ -1,0 +1,24 @@
+:::Lingua inglese
+FACAS |.
+T31 LIM (24)
+
+:::Religione cattolica o attivita alternative
+CAVALLO C.
+T31 LIM (24)
+
+:::Scienze integrate Fisica
+BRAMARDI L.
+T31 LIM (24)
+
+:::Lingua e letteratura italiana
+GROSSO S.
+T31 LIM (24)
+
+:::Storia
+GROSSO S.
+T31 LIM (24)
+
+:::Rea CMC Cee ery
+COZZOLINO A.
+LAB.T10 GAUSS (26)
+
