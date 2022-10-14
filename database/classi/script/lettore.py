@@ -131,5 +131,5 @@ def img_to_string(img):
     test = text.replace("DOMINIC! E.", "DOMINICI E.")
     test = text.replace("PAOLETTIL.", "PAOLETTI L.")
     test = text.replace("Ouinae.", "FOTI R.")
-    test = text.replace("FACAS |.", "FACAS L.")
+    test = text.replace("FACAS |.", "FACAS I.")
     return text
